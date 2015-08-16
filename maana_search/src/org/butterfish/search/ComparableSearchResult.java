@@ -6,7 +6,7 @@ import com.maana.search.SearchResult;
 
 public class ComparableSearchResult extends SearchResult implements Comparable<ComparableSearchResult> {
 
-	private SortedSet<Object> words;
+	private SortedSet<Object> words; 
 
 	public ComparableSearchResult(String documentName, int documentPorition, int score) {
 		super(documentName, documentPorition, score);

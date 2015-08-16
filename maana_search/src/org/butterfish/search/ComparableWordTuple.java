@@ -6,7 +6,7 @@ public class ComparableWordTuple implements Comparable<ComparableWordTuple> {
 	
 	private int count;
 	
-	private String word;
+	private String word; 
 	
 	public ComparableWordTuple(String documentName, String word, int count) {
 		this.documentName = documentName;

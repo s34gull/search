@@ -5,7 +5,7 @@ import java.util.List;
 import com.maana.search.Search;
 import com.maana.search.SearchResult;
 
-public class HashSearch implements Search {
+public class HashSearch implements Search { 
 
 	@Override
 	public void indexDocument(String documentName, String doc) {

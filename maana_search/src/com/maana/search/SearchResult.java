@@ -1,6 +1,6 @@
 package com.maana.search;
 
-public abstract class SearchResult {
+public abstract class SearchResult { 
 
 	/**
 	 * Name of the document for which this search result was built

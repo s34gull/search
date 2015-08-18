@@ -42,12 +42,12 @@ public class HashSearch implements Search {
 		}
 
 		List<String> cleansedDoc = Stopwords.removeStemmedStopWords(doc);
-		System.out.printf("cleansedDoc => %s\n", cleansedDoc);
+		//System.out.printf("cleansedDoc => %s\n", cleansedDoc);
 
 		ConcurrentMap<String, Long> scoredCollection = cleansedDoc.parallelStream().collect(Collectors
 				.toConcurrentMap((String word) -> Stemmer.stemString(word), (String word) -> 1L, Long::sum));
 
-		System.out.printf("collection => %s\n", scoredCollection);
+		//System.out.printf("collection => %s\n", scoredCollection);
 
 		for (Entry<String, Long> entry : scoredCollection.entrySet()) {
 			String word = entry.getKey();
@@ -82,7 +82,7 @@ public class HashSearch implements Search {
 
 		for (String word : words) {
 			word = new Stemmer().stem(word.trim().toLowerCase());
-			System.out.printf("Stemmed word => %s\n", word);
+			//System.out.printf("Stemmed word => %s\n", word);
 			
 			NavigableSet<ComparableWordTuple> ns = searchIndex.get(word);
 			if (ns == null) {
@@ -97,8 +97,8 @@ public class HashSearch implements Search {
 				} else {
 					result = results.get(cwt.getDocumentName());
 				}
-				System.out.printf("word => %s | count => %s | score => %s\n", cwt.getWord(), cwt.getCount(),
-						cwt.getScore());
+				//System.out.printf("word => %s | count => %s | score => %s\n", cwt.getWord(), cwt.getCount(),
+				//		cwt.getScore());
 				result.incrementScore(cwt.getScore());
 			}
 		}

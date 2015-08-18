@@ -16,7 +16,7 @@ public class Searcher {
 		search.indexDocument("Gettysburg Address", gettysburgAddress);
 		search.indexDocument("Hamlet's Soliloquy", hamletsSoliloquy);
 		
-		List<SearchResult> results = search.search("nation nobler");
+		List<SearchResult> results = search.search("nation nobler died die altogether");
 		
 		for(SearchResult result : results) {
 			System.out.println(result);

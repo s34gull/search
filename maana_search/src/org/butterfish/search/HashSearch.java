@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import com.maana.search.Search;
 import com.maana.search.SearchResult;
 
+import uk.ac.cam.ha293.tweetlabel.util.Stemmer;
 import uk.ac.cam.ha293.tweetlabel.util.Stopwords;
 
 public class HashSearch implements Search {
@@ -44,7 +45,7 @@ public class HashSearch implements Search {
 		System.out.printf("cleansedDoc => %s\n", cleansedDoc);
 
 		ConcurrentMap<String, Long> scoredCollection = cleansedDoc.parallelStream().collect(Collectors
-				.toConcurrentMap((String word) -> word.replaceAll("\\W", ""), (String word) -> 1L, Long::sum));
+				.toConcurrentMap((String word) -> Stemmer.stemString(word), (String word) -> 1L, Long::sum));
 
 		System.out.printf("collection => %s\n", scoredCollection);
 
@@ -80,7 +81,9 @@ public class HashSearch implements Search {
 		Map<String, ComparableSearchResult> results = new HashMap<String, ComparableSearchResult>();
 
 		for (String word : words) {
-			word = word.toLowerCase();
+			word = new Stemmer().stem(word.trim().toLowerCase());
+			System.out.printf("Stemmed word => %s\n", word);
+			
 			NavigableSet<ComparableWordTuple> ns = searchIndex.get(word);
 			if (ns == null) {
 				continue;

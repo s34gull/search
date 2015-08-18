@@ -43,12 +43,16 @@ package uk.ac.cam.ha293.tweetlabel.util;
  * the various stem(something) methods.
  */
 
-class Stemmer {
+public class Stemmer {
 	private char[] b;
 	private int i, /* offset into b */
 			i_end, /* offset to end of stemmed word */
 			j, k;
 	private static final int INC = 50;
+	
+	public static final String stemString(String str) {
+		return new Stemmer().stem(str);
+	}
 
 	/* unit of size whereby b is increased */
 	public Stemmer() {

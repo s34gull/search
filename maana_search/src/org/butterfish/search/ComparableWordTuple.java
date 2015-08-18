@@ -4,17 +4,17 @@ public class ComparableWordTuple implements Comparable<ComparableWordTuple> {
 
 	private String documentName;
 
-	private long count;
+	private Long count;
 
 	private String word;
 
-	public ComparableWordTuple(String documentName, String word, long count) {
-		if (documentName == null || word == null || count < 1 || "".equals(documentName) || "".equals(word)) {
+	public ComparableWordTuple(String documentName, String word, Long count) {
+		if (documentName == null || word == null || count < 1 || documentName.isEmpty() || word.isEmpty()) {
 			StringBuilder strbld = new StringBuilder();
-			if (documentName == null || "".equals(documentName)) {
+			if (documentName == null || documentName.isEmpty()) {
 				strbld.append("Parameter 'documentName' cannot be null or empty. ");
 			}
-			if (word == null || "".equals(word)) {
+			if (word == null || word.isEmpty()) {
 				strbld.append("Parameter 'word' cannot be null or empty. ");
 			}
 			if (count < 1) {
@@ -31,11 +31,11 @@ public class ComparableWordTuple implements Comparable<ComparableWordTuple> {
 		return documentName;
 	}
 
-	public double getScore() {
-		return Math.log(count);
+	public Integer getScore() {
+		return (int) (Math.log(count+1) * 100);
 	}
 
-	public long getCount() {
+	public Long getCount() {
 		return count;
 	}
 
@@ -45,11 +45,11 @@ public class ComparableWordTuple implements Comparable<ComparableWordTuple> {
 
 	public int compareTo(ComparableWordTuple cwt) {
 		int retval = 1;
-		
+
 		if (cwt != null) {
-			retval = (int) (this.getScore() - cwt.getScore()) * 1000;
+			retval = this.getScore() - cwt.getScore();
 		}
-		
+
 		return retval;
 	}
 
@@ -60,7 +60,11 @@ public class ComparableWordTuple implements Comparable<ComparableWordTuple> {
 			final ComparableWordTuple cwt = (ComparableWordTuple) obj;
 			isEqual = (cwt.getDocumentName() == documentName && cwt.getWord() == word);
 		}
-		
+
 		return isEqual;
+	}
+
+	public String toString() {
+		return String.format("documentName => %s | word => %s | count => %s", documentName, word, count);
 	}
 }

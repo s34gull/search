@@ -9,8 +9,8 @@ import java.util.Set;
 public class Stopwords {
 
 	/**
-	 * Comprehensive list of Stopwords that we are going to ignore when indexing a document,
-	 * "a", "an", "the" _e.g._
+	 * Comprehensive list of Stopwords that we are going to ignore when indexing
+	 * a document, "a", "an", "the" _e.g._
 	 */
 	private static final String[] stopwords = { "a", "as", "able", "about", "above", "according", "accordingly",
 			"across", "actually", "after", "afterwards", "again", "against", "aint", "all", "allow", "allows", "almost",
@@ -79,7 +79,7 @@ public class Stopwords {
 		}
 		return results;
 	}
-	
+
 	private static final boolean isStopword(String word) {
 		if (word.length() < 2)
 			return true;
@@ -109,17 +109,18 @@ public class Stopwords {
 			return false;
 	}
 
-
-	
 	public static final List<String> removeStopWords(String string) {
 		String[] words = string.split("\\s+");
 		ArrayList<String> goodWords = new ArrayList<String>();
 		for (String word : words) {
-			if (word.isEmpty())
+			word = word.trim().toLowerCase().replaceAll("\\W", "");
+			if (word.isEmpty()) {
 				continue;
-			if (isStopword(string))
+			} else if (isStopword(string)) {
 				continue; // remove stopwords
-			goodWords.add(word);
+			} else {
+				goodWords.add(word);
+			}
 		}
 		return goodWords;
 	}
@@ -128,13 +129,16 @@ public class Stopwords {
 		String[] words = string.split("\\s+");
 		List<String> goodWords = new ArrayList<String>();
 		for (String word : words) {
-			if (word.isEmpty())
+			word = word.trim().toLowerCase().replaceAll("\\W", "");
+			if (word.isEmpty()) {
 				continue;
-			if (isStemmedStopword(word))
+			} else if (isStemmedStopword(word)) {
 				continue;
-			if (word.charAt(0) >= '0' && word.charAt(0) <= '9')
+			} else if (word.charAt(0) >= '0' && word.charAt(0) <= '9') {
 				continue; // remove numbers, "25th", etc
-			goodWords.add(word);
+			} else {
+				goodWords.add(word.toLowerCase());
+			}
 		}
 		return goodWords;
 	}

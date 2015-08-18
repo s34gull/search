@@ -6,10 +6,8 @@ import com.maana.search.SearchResult;
 
 public class ComparableSearchResult extends SearchResult implements Comparable<ComparableSearchResult> {
 
-	private SortedSet<ComparableWordTuple> words; 
-
-	public ComparableSearchResult(String documentName, int documentPorition, int score) {
-		super(documentName, documentPorition, score);
+	public ComparableSearchResult(String documentName, int documentPosition, int score) {
+		super(documentName, documentPosition, score);
 	}
 
 	/**
@@ -17,7 +15,11 @@ public class ComparableSearchResult extends SearchResult implements Comparable<C
 	 * less than, equal to, or greater than the specified object.
 	 */
 	public int compareTo(ComparableSearchResult t) {
-		return this.score - t.score;
+		return this.score.get() - t.score.get();
+	}
+	
+	public void incrementScore(int delta) {
+		score.addAndGet(delta);
 	}
 
 }

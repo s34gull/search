@@ -1,6 +1,8 @@
 package com.maana.search;
 
-public abstract class SearchResult { 
+import java.util.concurrent.atomic.AtomicInteger;
+
+public abstract class SearchResult {
 
 	/**
 	 * Name of the document for which this search result was built
@@ -15,14 +17,13 @@ public abstract class SearchResult {
 	/**
 	 * score higher is more relevant
 	 */
-	protected int score;
-	
-	public SearchResult(String documentName, int documentPorition, int score) {
+	protected AtomicInteger score;
+
+	public SearchResult(String documentName, int documentPosition, int score) {
 		this.documentName = documentName;
-		this.documentPosition = documentPorition;
-		this.score = score;
+		this.documentPosition = documentPosition;
+		this.score = new AtomicInteger(score);
 	}
-	
 
 	public String getDocumentName() {
 		return documentName;
@@ -33,6 +34,11 @@ public abstract class SearchResult {
 	}
 
 	public int getScore() {
-		return score;
+		return score.get();
+	}
+
+	public String toString() {
+		return String.format("documentName => %s | documentPosition => %s | score => %s", documentName,
+				documentPosition, score);
 	}
 }

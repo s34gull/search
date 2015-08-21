@@ -1,13 +1,11 @@
 package org.butterfish.search;
 
-import java.util.SortedSet;
-
 import com.maana.search.SearchResult;
 
 public class ComparableSearchResult extends SearchResult implements Comparable<ComparableSearchResult> {
 
-	public ComparableSearchResult(String documentName, int documentPosition, int score) {
-		super(documentName, documentPosition, score);
+	public ComparableSearchResult(String documentName) {
+		super(documentName);
 	}
 
 	/**
@@ -18,8 +16,9 @@ public class ComparableSearchResult extends SearchResult implements Comparable<C
 		return this.score.get() - t.score.get();
 	}
 	
-	public void incrementScore(int delta) {
-		score.addAndGet(delta);
+	public void addScoredWord(ComparablePositionedWord word, Integer score) {
+		this.documentPositions.add(word);
+		this.score.addAndGet(score);
 	}
 
 }

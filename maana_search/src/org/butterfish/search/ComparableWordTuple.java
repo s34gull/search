@@ -1,15 +1,18 @@
 package org.butterfish.search;
 
+import java.util.List;
+
 public class ComparableWordTuple implements Comparable<ComparableWordTuple> {
-
-	private String documentName;
-
-	private Long count;
 
 	private String word;
 
-	public ComparableWordTuple(String documentName, String word, Long count) {
-		if (documentName == null || word == null || count < 1 || documentName.isEmpty() || word.isEmpty()) {
+	private List<Long> documentPositions;
+
+	private String documentName;
+
+	public ComparableWordTuple(String word, List<Long> documentPositions, String documentName) {
+		if (documentName == null || word == null || documentPositions == null || documentPositions.isEmpty()
+				|| documentName.isEmpty() || word.isEmpty()) {
 			StringBuilder strbld = new StringBuilder();
 			if (documentName == null || documentName.isEmpty()) {
 				strbld.append("Parameter 'documentName' cannot be null or empty. ");
@@ -17,26 +20,30 @@ public class ComparableWordTuple implements Comparable<ComparableWordTuple> {
 			if (word == null || word.isEmpty()) {
 				strbld.append("Parameter 'word' cannot be null or empty. ");
 			}
-			if (count < 1) {
+			if (documentPositions == null || documentPositions.isEmpty()) {
 				strbld.append("Parameter 'count' cannot be less than '1'. ");
 			}
 			throw new IllegalArgumentException(strbld.toString());
 		}
-		this.documentName = documentName;
 		this.word = word;
-		this.count = count;
+		this.documentPositions = documentPositions;
+		this.documentName = documentName;
 	}
 
 	public String getDocumentName() {
 		return documentName;
 	}
-
-	public Integer getScore() {
-		return (int) (Math.log(count+1) * 100);
+	
+	public List<Long> getDocumentPositions() {
+		return documentPositions;
 	}
 
-	public Long getCount() {
-		return count;
+	public Integer getScore() {
+		return (int) (Math.log(this.documentPositions.size() + 1) * 100);
+	}
+
+	public Integer getCount() {
+		return this.documentPositions.size();
 	}
 
 	public String getWord() {
@@ -65,6 +72,6 @@ public class ComparableWordTuple implements Comparable<ComparableWordTuple> {
 	}
 
 	public String toString() {
-		return String.format("documentName => %s | word => %s | count => %s", documentName, word, count);
+		return String.format("documentName => %s | word => %s | count => %s", documentName, word, this.documentPositions.size());
 	}
 }

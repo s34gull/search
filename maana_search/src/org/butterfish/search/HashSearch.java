@@ -41,30 +41,18 @@ public class HashSearch implements Search {
 			throw new IllegalArgumentException(strbld.toString());
 		}
 
-		List<String> cleansedDoc = Stopwords.removeStemmedStopWords(doc);
-		//System.out.printf("cleansedDoc => %s\n", cleansedDoc);
+		Map<String, ArrayList<Long>> cleansedDoc = Stopwords.reduceNoStemmedStopWords(doc, true);
+		// System.out.printf("cleansedDoc => %s\n", cleansedDoc);
 
-		ConcurrentMap<String, Long> scoredCollection = cleansedDoc.parallelStream().collect(Collectors
-				.toConcurrentMap((String word) -> Stemmer.stemString(word), (String word) -> 1L, Long::sum));
+		for (Entry<String, ArrayList<Long>> entry : cleansedDoc.entrySet()) {
 
-		//System.out.printf("collection => %s\n", scoredCollection);
-
-		for (Entry<String, Long> entry : scoredCollection.entrySet()) {
-			String word = entry.getKey();
-			Long count = entry.getValue();
-			// try to get the Set mapped to the word and add this document
-			ComparableWordTuple cwt = new ComparableWordTuple(documentName, word, count);
+			ComparableWordTuple cwt = new ComparableWordTuple(entry.getKey(), entry.getValue(), documentName);
 			// System.out.printf("ComparableWordTuple => %s\n", cwt);
 
-			ConcurrentSkipListSet<ComparableWordTuple> ns = null;
-			if (!searchIndex.containsKey(word)) {
-				ns = new ConcurrentSkipListSet<ComparableWordTuple>();
-				searchIndex.putIfAbsent(word, ns);
-				// System.out.printf("new NavigableSet => %s\n", ns);
-			} else {
-				ns = searchIndex.get(word);
-				// System.out.printf("new NavigableSet => %s\n", ns);
-			}
+			searchIndex.putIfAbsent(cwt.getWord(), new ConcurrentSkipListSet<ComparableWordTuple>());
+			ConcurrentSkipListSet<ComparableWordTuple> ns = searchIndex.get(cwt.getWord());
+			// System.out.printf("new NavigableSet => %s\n", ns);
+
 			ns.add(cwt);
 		}
 
@@ -82,8 +70,8 @@ public class HashSearch implements Search {
 
 		for (String word : words) {
 			word = new Stemmer().stem(word.trim().toLowerCase());
-			//System.out.printf("Stemmed word => %s\n", word);
-			
+			// System.out.printf("Stemmed word => %s\n", word);
+
 			NavigableSet<ComparableWordTuple> ns = searchIndex.get(word);
 			if (ns == null) {
 				continue;
@@ -92,14 +80,15 @@ public class HashSearch implements Search {
 			for (ComparableWordTuple cwt : ns) {
 				ComparableSearchResult result = null;
 				if (!results.containsKey(cwt.getDocumentName())) {
-					result = new ComparableSearchResult(cwt.getDocumentName(), 0, 0);
+					result = new ComparableSearchResult(cwt.getDocumentName());
 					results.put(cwt.getDocumentName(), result);
 				} else {
 					result = results.get(cwt.getDocumentName());
 				}
-				//System.out.printf("word => %s | count => %s | score => %s\n", cwt.getWord(), cwt.getCount(),
-				//		cwt.getScore());
-				result.incrementScore(cwt.getScore());
+				// System.out.printf("word => %s | count => %s | score => %s\n",
+				// cwt.getWord(), cwt.getCount(),
+				// cwt.getScore());
+				result.addScoredWord(ComparablePositionedWord.fromComparableWordTuple(cwt), cwt.getScore());
 			}
 		}
 

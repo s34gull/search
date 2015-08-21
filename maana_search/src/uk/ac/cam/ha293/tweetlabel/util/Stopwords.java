@@ -2,8 +2,9 @@ package uk.ac.cam.ha293.tweetlabel.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class Stopwords {
@@ -109,26 +110,34 @@ public class Stopwords {
 			return false;
 	}
 
-	public static final List<String> removeStopWords(String string) {
+	public static final Map<String, ArrayList<Long>> reduceNoStopWords(String string, boolean stem) {
+		Long position = -1L;
 		String[] words = string.split("\\s+");
-		ArrayList<String> goodWords = new ArrayList<String>();
+		Map<String, ArrayList<Long>> goodWordsMap = new HashMap<String, ArrayList<Long>>();
 		for (String word : words) {
+			position++;
 			word = word.trim().toLowerCase().replaceAll("\\W", "");
 			if (word.isEmpty()) {
 				continue;
 			} else if (isStopword(string)) {
 				continue; // remove stopwords
 			} else {
-				goodWords.add(word);
+				word = stem ? Stemmer.stemString(word) : word;
+				ArrayList<Long> positions = goodWordsMap.getOrDefault(word,
+						new ArrayList<Long>());
+				goodWordsMap.putIfAbsent(word, positions);
+				positions.add(position.longValue());
 			}
 		}
-		return goodWords;
+		return goodWordsMap;
 	}
 
-	public static final List<String> removeStemmedStopWords(String string) {
+	public static final Map<String, ArrayList<Long>> reduceNoStemmedStopWords(String string, boolean stem) {
+		Long position = -1L;
 		String[] words = string.split("\\s+");
-		List<String> goodWords = new ArrayList<String>();
+		Map<String, ArrayList<Long>> goodWordsMap = new HashMap<String, ArrayList<Long>>();
 		for (String word : words) {
+			position++;
 			word = word.trim().toLowerCase().replaceAll("\\W", "");
 			if (word.isEmpty()) {
 				continue;
@@ -137,9 +146,13 @@ public class Stopwords {
 			} else if (word.charAt(0) >= '0' && word.charAt(0) <= '9') {
 				continue; // remove numbers, "25th", etc
 			} else {
-				goodWords.add(word.toLowerCase());
+				word = stem ? Stemmer.stemString(word) : word;
+				ArrayList<Long> positions = goodWordsMap.getOrDefault(word,
+						new ArrayList<Long>());
+				goodWordsMap.putIfAbsent(word, positions);
+				positions.add(position.longValue());
 			}
 		}
-		return goodWords;
+		return goodWordsMap;
 	}
 }

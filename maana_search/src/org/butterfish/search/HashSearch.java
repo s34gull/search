@@ -10,9 +10,7 @@ import java.util.Map.Entry;
 import java.util.NavigableSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.stream.Collectors;
 
 import com.maana.search.Search;
 import com.maana.search.SearchResult;
@@ -64,7 +62,7 @@ public class HashSearch implements Search {
 			throw new IllegalArgumentException("Parameter 'searchTerms' cannot be null or empty. ");
 		}
 		HashSet<String> words = (new HashSet<String>(Arrays.asList(searchTerms.split("\\s+"))));
-		System.out.printf("words => %s\n", words);
+		System.out.printf("HashSearch.search(): searchTerms => %s\n", words);
 
 		Map<String, ComparableSearchResult> results = new HashMap<String, ComparableSearchResult>();
 
@@ -85,9 +83,7 @@ public class HashSearch implements Search {
 				} else {
 					result = results.get(cwt.getDocumentName());
 				}
-				// System.out.printf("word => %s | count => %s | score => %s\n",
-				// cwt.getWord(), cwt.getCount(),
-				// cwt.getScore());
+
 				result.addScoredWord(ComparablePositionedWord.fromComparableWordTuple(cwt), cwt.getScore());
 			}
 		}

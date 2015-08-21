@@ -30,11 +30,15 @@ public class ComparablePositionedWord implements Comparable<ComparablePositioned
 		if (t != null) {
 			retval = this.positions.size() - t.getPositions().size();
 		}
+		
+		if (retval == 0) {
+			retval = -1;
+		}
 
 		return retval;
 	}
 
 	public String toString() {
-		return String.format("word => %s | positions => %s", word, positions);
+		return String.format("(word => %s | positions => %s | count => %d)", word, positions, positions.size());
 	}
 }

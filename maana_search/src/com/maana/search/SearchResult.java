@@ -1,7 +1,5 @@
 package com.maana.search;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -20,6 +18,11 @@ public abstract class SearchResult {
 	protected TreeSet<ComparablePositionedWord> documentPositions;
 
 	/**
+	 * Used to compute weight
+	 */
+	protected AtomicInteger count;
+
+	/**
 	 * score higher is more relevant
 	 */
 	protected AtomicInteger score;
@@ -28,6 +31,7 @@ public abstract class SearchResult {
 		this.documentName = documentName;
 		this.documentPositions = new TreeSet<ComparablePositionedWord>();
 		this.score = new AtomicInteger(0);
+		this.count = new AtomicInteger(0);
 	}
 
 	public String getDocumentName() {
@@ -37,13 +41,21 @@ public abstract class SearchResult {
 	public TreeSet<ComparablePositionedWord> getDocumentPositions() {
 		return documentPositions;
 	}
+	
+	public double getWeight() {
+		return Math.log10(documentPositions.size() + 1);
+	}
 
 	public int getScore() {
 		return score.get();
 	}
+	
+	public int getWeightedScore() {
+		return (int)(getScore() * getWeight());
+	}
 
 	public String toString() {
-		return String.format("documentName => %s | documentPosition => %s | score => %s", documentName,
-				documentPositions, score);
+		return String.format("documentName => %s | documentPosition => %s | score => %d | count => %d | weight => %f | weighted_score => %d", documentName,
+				documentPositions, getScore(), count.get(), getWeight(), getWeightedScore());
 	}
 }

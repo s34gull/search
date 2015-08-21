@@ -16,25 +16,25 @@ public class Searcher {
 		long start = System.currentTimeMillis();
 		search.indexDocument("Gettysburg Address", gettysburgAddress);
 		long stop = System.currentTimeMillis();
-		System.out.printf("Indexed Gettysburg Address in %d ms.\n", (stop - start));
+		System.out.printf("Searcher: Indexed Gettysburg Address in %d ms.\n", (stop - start));
 
 		start = System.currentTimeMillis();
 		search.indexDocument("Hamlet's Soliloquy", hamletsSoliloquy);
 		stop = System.currentTimeMillis();
-		System.out.printf("Indexed Hamlet's Soliloquy in %d ms.\n", (stop - start));
+		System.out.printf("Searcher: Indexed Hamlet's Soliloquy in %d ms.\n", (stop - start));
 
 		start = System.currentTimeMillis();
 		search.indexDocument("Pantagruel", pantagruel);
 		stop = System.currentTimeMillis();
-		System.out.printf("Indexed Pantagruel in %d ms.\n", (stop - start));
+		System.out.printf("Searcher: Indexed Pantagruel in %d ms.\n", (stop - start));
 
 		start = System.currentTimeMillis();
 		List<SearchResult> results = search.search("nation nobler died die altogether Pantagruel father Gargantua");
 		stop = System.currentTimeMillis();
-		System.out.printf("Searched corpus in %d ms.\n", (stop - start));
+		System.out.printf("Searcher: Searched corpus in %d ms.\n", (stop - start));
 
 		for (SearchResult result : results) {
-			System.out.println(result);
+			System.out.printf("Searcher: result => %s\n", result);
 		}
 	}
 

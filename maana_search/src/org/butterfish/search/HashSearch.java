@@ -18,15 +18,45 @@ import com.maana.search.SearchResult;
 import uk.ac.cam.ha293.tweetlabel.util.Stemmer;
 import uk.ac.cam.ha293.tweetlabel.util.Stopwords;
 
+/**
+ * An implementation of the Search interface that leverages a ConcurrentHashMap
+ * for the search term to document::term-position tuple. The index does not
+ * contain any stop words; only lowercase, stemmed words are stored in the 
+ * index. The index supports concurrent addition of documents to the index. 
+ * There is no support for removal of a given document from the index.
+ * 
+ * @author jedwards
+ *
+ */
 public class HashSearch implements Search {
 
 	private final ConcurrentHashMap<String, ConcurrentSkipListSet<ComparableWordTuple>> searchIndex;
 
+
+	/**
+	 * Creates a new instance of the HashSearch object, which implements a naive
+	 * stemmed-term search routine.
+	 */
 	public HashSearch() {
 		searchIndex = new ConcurrentHashMap<String, ConcurrentSkipListSet<ComparableWordTuple>>();
 	}
 
-	@Override
+	
+	/**
+	 * Documents are indexed by tokenizing on whitespace, converting the tokens 
+	 * to lowercase, then stemming the tokens (after having removed all stop 
+	 * words). These stemmed tokens are then stored as the keys in a 
+	 * ConcurrentHashMap, the keys of which resolve to a NavigableSet of 
+	 * ComparableWordTuples, which contain the document name in which the word 
+	 * was found, as well as the positions (0-indexed offset from beginning of 
+	 * said document) where that term was found.
+	 * 
+	 * @param documentName The name of the document being indexed. 
+	 * @param doc The "document" to index.
+	 * 
+	 * @throws IllegalArgumentException if any of the parameters are null or
+	 * empty.
+	 */
 	public void indexDocument(final String documentName, final String doc) {
 		if (documentName == null || doc == null || documentName.isEmpty() || doc.isEmpty()) {
 			StringBuilder strbld = new StringBuilder();
@@ -56,7 +86,17 @@ public class HashSearch implements Search {
 
 	}
 
-	@Override
+	/**
+	 * Searching involves tokenizing the list of search terms on whitespace, 
+	 * converting the tokens to lowercase and stemming them. The converted 
+	 * tokens are then used to access possible entries within the index (the 
+	 * ConcurrentHashMap).
+	 * 
+	 * @param searchTerms Whitespace delimited list of terms we are looking for
+	 * 
+	 * @return List of SearchResult objects. The list will never be null, but
+	 * MAY be empty.
+	 */
 	public List<SearchResult> search(String searchTerms) {
 		if (searchTerms == null || searchTerms.isEmpty()) {
 			throw new IllegalArgumentException("Parameter 'searchTerms' cannot be null or empty. ");

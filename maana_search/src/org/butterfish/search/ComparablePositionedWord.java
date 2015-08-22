@@ -30,12 +30,23 @@ public class ComparablePositionedWord implements Comparable<ComparablePositioned
 		if (t != null) {
 			retval = this.positions.size() - t.getPositions().size();
 		}
-		
+
 		if (retval == 0) {
 			retval = -1;
 		}
 
 		return retval;
+	}
+
+	public boolean equals(Object obj) {
+		boolean isEqual = false;
+
+		if (obj != null && obj.getClass() == getClass()) {
+			final ComparablePositionedWord cpw = (ComparablePositionedWord) obj;
+			isEqual = (cpw.getPositions() == positions && cpw.getWord() == word);
+		}
+
+		return isEqual;
 	}
 
 	public String toString() {

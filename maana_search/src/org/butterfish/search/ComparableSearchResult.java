@@ -17,10 +17,18 @@ public class ComparableSearchResult extends SearchResult implements Comparable<C
 	}
 
 	public void addScoredWord(ComparablePositionedWord word, Integer score) {
-		System.out.printf("ComparableSearchResult.addScoredWord(): documentName => %s | positionedWord => %s | score => %d\n", documentName, word, score);
+		System.out.printf(
+				"ComparableSearchResult.addScoredWord(): documentName => %s | positionedWord => %s | score => %d\n",
+				documentName, word, score);
 		this.documentPositions.add(word);
 		this.count.addAndGet(word.getPositions().size());
 		this.score.addAndGet(score);
+		this.weight.addAndGet(Double.doubleToLongBits(Math.log10(word.getPositions().size())));
+	}
+
+	@Override
+	public double getWeight() {
+		return Math.log10(this.documentPositions.size() + 1);
 	}
 
 }

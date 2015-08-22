@@ -95,7 +95,7 @@ public class HashSearch implements Search {
 	 * @param searchTerms Whitespace delimited list of terms we are looking for
 	 * 
 	 * @return List of SearchResult objects. The list will never be null, but
-	 * MAY be empty.
+	 * MAY be empty. The list will be sorted in descending score order.
 	 */
 	public List<SearchResult> search(String searchTerms) {
 		if (searchTerms == null || searchTerms.isEmpty()) {
@@ -128,6 +128,9 @@ public class HashSearch implements Search {
 			}
 		}
 
+		/*
+		 * Returns list of search results in descending order.
+		 */
 		return new ArrayList<SearchResult>((new TreeSet<SearchResult>(results.values())).descendingSet());
 	}
 

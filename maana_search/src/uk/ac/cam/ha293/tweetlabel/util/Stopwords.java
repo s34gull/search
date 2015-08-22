@@ -110,6 +110,12 @@ public class Stopwords {
 			return false;
 	}
 
+	/**
+	 * 
+	 * @param string
+	 * @param stem
+	 * @return
+	 */
 	public static final Map<String, ArrayList<Long>> reduceNoStopWords(String string, boolean stem) {
 		Long position = -1L;
 		String[] words = string.split("\\s+");
@@ -132,6 +138,12 @@ public class Stopwords {
 		return goodWordsMap;
 	}
 
+	/**
+	 * 
+	 * @param string
+	 * @param stem
+	 * @return
+	 */
 	public static final Map<String, ArrayList<Long>> reduceNoStemmedStopWords(String string, boolean stem) {
 		Long position = -1L;
 		String[] words = string.split("\\s+");

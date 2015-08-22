@@ -7,6 +7,11 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.butterfish.search.ComparablePositionedWord;
 
+/**
+ * 
+ * @author jedwards
+ *
+ */
 public abstract class SearchResult {
 
 	/**
@@ -38,6 +43,10 @@ public abstract class SearchResult {
 	 */
 	protected AtomicLong weight;
 
+	/**
+	 * 
+	 * @param documentName
+	 */
 	public SearchResult(String documentName) {
 		this.documentName = documentName;
 		this.documentPositions = new ConcurrentSkipListSet<ComparablePositionedWord>();
@@ -46,30 +55,57 @@ public abstract class SearchResult {
 		this.weight = new AtomicLong(1);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public String getDocumentName() {
 		return documentName;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public NavigableSet<ComparablePositionedWord> getDocumentPositions() {
 		return documentPositions;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getScore() {
 		return score.get();
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public int getCount() {
 		return count.get();
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public double getWeight() {
 		return Double.longBitsToDouble(weight.get());
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getWeightedScore() {
 		return (int) (getScore() * getWeight());
 	}
 
+	/**
+	 * 
+	 */
 	public String toString() {
 		return String.format(
 				"documentName => %s | documentPosition => %s | score => %d | count => %d | weight => %f | weighted_score => %d",

@@ -2,28 +2,54 @@ package org.butterfish.search;
 
 import java.util.List;
 
+/**
+ * 
+ * @author jedwards
+ *
+ */
 public class ComparablePositionedWord implements Comparable<ComparablePositionedWord> {
 
 	private String word;
 	private List<Long> positions;
 
+	/**
+	 * 
+	 * @param cwt
+	 * @return
+	 */
 	public static ComparablePositionedWord fromComparableWordTuple(ComparableWordTuple cwt) {
 		return new ComparablePositionedWord(cwt.getWord(), cwt.getDocumentPositions());
 	}
 
+	/**
+	 * 
+	 * @param word
+	 * @param positions
+	 */
 	public ComparablePositionedWord(String word, List<Long> positions) {
 		this.word = word;
 		this.positions = positions;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public String getWord() {
 		return word;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public List<Long> getPositions() {
 		return positions;
 	}
 
+	/**
+	 * 
+	 */
 	public int compareTo(ComparablePositionedWord t) {
 		int retval = 1;
 
@@ -32,12 +58,15 @@ public class ComparablePositionedWord implements Comparable<ComparablePositioned
 		}
 
 		if (retval == 0) {
-			retval = -1;
+			retval = word.compareTo(t.getWord());
 		}
 
 		return retval;
 	}
 
+	/**
+	 * 
+	 */
 	public boolean equals(Object obj) {
 		boolean isEqual = false;
 
@@ -49,6 +78,9 @@ public class ComparablePositionedWord implements Comparable<ComparablePositioned
 		return isEqual;
 	}
 
+	/**
+	 * 
+	 */
 	public String toString() {
 		return String.format("(word => %s | positions => %s | count => %d)", word, positions, positions.size());
 	}

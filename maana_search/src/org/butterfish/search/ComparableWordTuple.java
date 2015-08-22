@@ -2,6 +2,11 @@ package org.butterfish.search;
 
 import java.util.List;
 
+/**
+ * 
+ * @author jedwards
+ *
+ */
 public class ComparableWordTuple implements Comparable<ComparableWordTuple> {
 
 	private String word;
@@ -10,6 +15,12 @@ public class ComparableWordTuple implements Comparable<ComparableWordTuple> {
 
 	private String documentName;
 
+	/**
+	 * 
+	 * @param word
+	 * @param documentPositions
+	 * @param documentName
+	 */
 	public ComparableWordTuple(String word, List<Long> documentPositions, String documentName) {
 		if (documentName == null || word == null || documentPositions == null || documentPositions.isEmpty()
 				|| documentName.isEmpty() || word.isEmpty()) {
@@ -30,26 +41,49 @@ public class ComparableWordTuple implements Comparable<ComparableWordTuple> {
 		this.documentName = documentName;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public String getDocumentName() {
 		return documentName;
 	}
-	
+
+	/**
+	 * 
+	 * @return
+	 */
 	public List<Long> getDocumentPositions() {
 		return documentPositions;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public Integer getScore() {
 		return (int) (Math.log(this.documentPositions.size() + 1) * 100);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public Integer getCount() {
 		return this.documentPositions.size();
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public String getWord() {
 		return word;
 	}
 
+	/**
+	 * 
+	 */
 	public int compareTo(ComparableWordTuple cwt) {
 		int retval = 1;
 
@@ -57,9 +91,16 @@ public class ComparableWordTuple implements Comparable<ComparableWordTuple> {
 			retval = this.getScore() - cwt.getScore();
 		}
 
+		if (retval == 0) {
+			retval = word.compareTo(cwt.getWord());
+		}
+
 		return retval;
 	}
 
+	/**
+	 * 
+	 */
 	public boolean equals(Object obj) {
 		boolean isEqual = false;
 
@@ -71,7 +112,11 @@ public class ComparableWordTuple implements Comparable<ComparableWordTuple> {
 		return isEqual;
 	}
 
+	/**
+	 * 
+	 */
 	public String toString() {
-		return String.format("documentName => %s | word => %s | count => %s", documentName, word, this.documentPositions.size());
+		return String.format("documentName => %s | word => %s | count => %s", documentName, word,
+				this.documentPositions.size());
 	}
 }

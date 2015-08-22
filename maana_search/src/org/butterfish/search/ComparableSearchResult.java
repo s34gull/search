@@ -2,20 +2,26 @@ package org.butterfish.search;
 
 import com.maana.search.SearchResult;
 
+/**
+ * 
+ * @author jedwards
+ *
+ */
 public class ComparableSearchResult extends SearchResult implements Comparable<ComparableSearchResult> {
 
+	/**
+	 * 
+	 * @param documentName
+	 */
 	public ComparableSearchResult(String documentName) {
 		super(documentName);
 	}
 
 	/**
-	 * Returns a negative integer, zero, or a positive integer as this object is
-	 * less than, equal to, or greater than the specified object.
+	 * 
+	 * @param word
+	 * @param score
 	 */
-	public int compareTo(ComparableSearchResult t) {
-		return this.getWeightedScore() - t.getWeightedScore();
-	}
-
 	public void addScoredWord(ComparablePositionedWord word, Integer score) {
 		System.out.printf(
 				"ComparableSearchResult.addScoredWord(): documentName => %s | positionedWord => %s | score => %d\n",
@@ -26,9 +32,44 @@ public class ComparableSearchResult extends SearchResult implements Comparable<C
 		this.weight.addAndGet(Double.doubleToLongBits(Math.log10(word.getPositions().size())));
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public double getWeight() {
 		return Math.log10(this.documentPositions.size() + 1);
+	}
+
+	/**
+	 * Returns a negative integer, or a positive integer as this object is less
+	 * than, or greater than the specified object. A set is never considered
+	 * equal based on size.
+	 */
+	public int compareTo(ComparableSearchResult t) {
+		int retval = 1;
+
+		if (t != null) {
+			retval = this.getWeightedScore() - t.getWeightedScore();
+		}
+
+		if (retval == 0) {
+			retval = documentName.compareTo(t.getDocumentName());
+		}
+		return retval;
+	}
+
+	/**
+	 * 
+	 */
+	public boolean equals(Object obj) {
+		boolean isEqual = false;
+
+		if (obj != null && obj.getClass() == getClass()) {
+			final ComparableSearchResult csr = (ComparableSearchResult) obj;
+			isEqual = (csr.getDocumentName() == documentName && csr.getWeightedScore() == getWeightedScore());
+		}
+
+		return isEqual;
 	}
 
 }

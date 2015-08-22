@@ -60,10 +60,10 @@ public class HashSearch implements Search {
 	public void indexDocument(final String documentName, final String doc) {
 		if (documentName == null || doc == null || documentName.isEmpty() || doc.isEmpty()) {
 			StringBuilder strbld = new StringBuilder();
-			if (documentName == null || "".equals(documentName)) {
+			if (documentName == null || documentName.isEmpty()) {
 				strbld.append("Parameter 'documentName' cannot be null or empty. ");
 			}
-			if (doc == null || "".equals(doc)) {
+			if (doc == null || doc.isEmpty()) {
 				strbld.append("Parameter 'doc' cannot be null or empty. ");
 			}
 			throw new IllegalArgumentException(strbld.toString());

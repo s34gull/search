@@ -2,6 +2,8 @@ package org.butterfish.search;
 
 import java.util.List;
 
+import com.google.common.hash.Hashing;
+
 /**
  * 
  * @author jedwards
@@ -9,8 +11,9 @@ import java.util.List;
  */
 public class ComparablePositionedWord implements Comparable<ComparablePositionedWord> {
 
-	private String word;
-	private List<Long> positions;
+	private final String word;
+	private final List<Long> positions;
+	private final int hashCode;
 
 	/**
 	 * 
@@ -29,6 +32,11 @@ public class ComparablePositionedWord implements Comparable<ComparablePositioned
 	public ComparablePositionedWord(String word, List<Long> positions) {
 		this.word = word;
 		this.positions = positions;
+		this.hashCode = Hashing.murmur3_32().newHasher()
+			.putBytes(word.getBytes())
+			.putBytes(positions.toString().getBytes())
+			.hash()
+			.asInt();
 	}
 
 	/**
@@ -83,5 +91,12 @@ public class ComparablePositionedWord implements Comparable<ComparablePositioned
 	 */
 	public String toString() {
 		return String.format("(word => %s | positions => %s | count => %d)", word, positions, positions.size());
+	}
+	
+	/**
+	 * 
+	 */
+	public int hashCode() {
+		return hashCode;
 	}
 }

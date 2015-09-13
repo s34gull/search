@@ -1,5 +1,6 @@
 package org.butterfish.search;
 
+import com.google.common.hash.Hashing;
 import com.maana.search.SearchResult;
 
 /**
@@ -9,12 +10,18 @@ import com.maana.search.SearchResult;
  */
 public class ComparableSearchResult extends SearchResult implements Comparable<ComparableSearchResult> {
 
+	private int hashCode;
 	/**
 	 * 
 	 * @param documentName
 	 */
 	public ComparableSearchResult(String documentName) {
 		super(documentName);
+		
+		this.hashCode = Hashing.murmur3_32().newHasher()
+			.putBytes(documentName.getBytes())
+			.hash()
+			.asInt();
 	}
 
 	/**
@@ -30,6 +37,11 @@ public class ComparableSearchResult extends SearchResult implements Comparable<C
 		this.count.addAndGet(word.getPositions().size());
 		this.score.addAndGet(score);
 		this.weight.addAndGet(Double.doubleToLongBits(Math.log10(word.getPositions().size())));
+		this.hashCode = Hashing.murmur3_32().newHasher()
+			.putBytes(documentName.getBytes())
+			.putInt(getWeightedScore())
+			.hash()
+			.asInt();
 	}
 
 	/**
@@ -70,6 +82,13 @@ public class ComparableSearchResult extends SearchResult implements Comparable<C
 		}
 
 		return isEqual;
+	}
+	
+	/**
+	 * 
+	 */
+	public int hashCode() {
+		return hashCode;
 	}
 
 }

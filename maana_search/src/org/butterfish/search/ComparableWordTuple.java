@@ -2,6 +2,9 @@ package org.butterfish.search;
 
 import java.util.List;
 
+import com.google.common.hash.Hasher;
+import com.google.common.hash.Hashing;
+
 /**
  * 
  * @author jedwards
@@ -9,11 +12,13 @@ import java.util.List;
  */
 public class ComparableWordTuple implements Comparable<ComparableWordTuple> {
 
-	private String word;
+	private final String word;
 
-	private List<Long> documentPositions;
+	private final List<Long> documentPositions;
 
-	private String documentName;
+	private final String documentName;
+	
+	private final int hashCode;
 
 	/**
 	 * 
@@ -36,9 +41,15 @@ public class ComparableWordTuple implements Comparable<ComparableWordTuple> {
 			}
 			throw new IllegalArgumentException(strbld.toString());
 		}
+		
 		this.word = word;
 		this.documentPositions = documentPositions;
 		this.documentName = documentName;
+		this.hashCode = Hashing.murmur3_32().newHasher()
+			.putBytes(documentName.getBytes())
+			.putBytes(word.getBytes())
+			.hash()
+			.asInt();
 	}
 
 	/**
@@ -118,5 +129,12 @@ public class ComparableWordTuple implements Comparable<ComparableWordTuple> {
 	public String toString() {
 		return String.format("documentName => %s | word => %s | count => %s", documentName, word,
 				this.documentPositions.size());
+	}
+
+	/**
+	 * 
+	 */
+	public int hashCode() {
+		return hashCode;
 	}
 }

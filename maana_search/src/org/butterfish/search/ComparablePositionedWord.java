@@ -32,11 +32,12 @@ public class ComparablePositionedWord implements Comparable<ComparablePositioned
 	public ComparablePositionedWord(String word, List<Long> positions) {
 		this.word = word;
 		this.positions = positions;
-		this.hashCode = Hashing.murmur3_32().newHasher()
-			.putBytes(word.getBytes())
-			.putBytes(positions.toString().getBytes())
-			.hash()
-			.asInt();
+		this.hashCode = Math.abs(
+				Hashing.murmur3_32().newHasher()
+					.putBytes(word.getBytes())
+					.putBytes(positions.toString().getBytes())
+					.hash()
+					.asInt());
 	}
 
 	/**

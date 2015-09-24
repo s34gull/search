@@ -18,10 +18,11 @@ public class ComparableSearchResult extends SearchResult implements Comparable<C
 	public ComparableSearchResult(String documentName) {
 		super(documentName);
 		
-		this.hashCode = Hashing.murmur3_32().newHasher()
-			.putBytes(documentName.getBytes())
-			.hash()
-			.asInt();
+		this.hashCode = Math.abs(
+				Hashing.murmur3_32().newHasher()
+					.putBytes(documentName.getBytes())
+					.hash()
+					.asInt());
 	}
 
 	/**

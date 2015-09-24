@@ -30,7 +30,7 @@ import uk.ac.cam.ha293.tweetlabel.util.Stopwords;
  */
 public class HashSearch implements Search {
 
-	private final ConcurrentHashMap<String, ConcurrentSkipListSet<ComparableWordTuple>> searchIndex;
+	private final ConcurrentHashMap<MString, ConcurrentSkipListSet<ComparableWordTuple>> searchIndex;
 
 
 	/**
@@ -38,7 +38,7 @@ public class HashSearch implements Search {
 	 * stemmed-term search routine.
 	 */
 	public HashSearch() {
-		searchIndex = new ConcurrentHashMap<String, ConcurrentSkipListSet<ComparableWordTuple>>();
+		searchIndex = new ConcurrentHashMap<MString, ConcurrentSkipListSet<ComparableWordTuple>>();
 	}
 
 	
@@ -77,8 +77,9 @@ public class HashSearch implements Search {
 			ComparableWordTuple cwt = new ComparableWordTuple(entry.getKey(), entry.getValue(), documentName);
 			// System.out.printf("ComparableWordTuple => %s\n", cwt);
 
-			searchIndex.putIfAbsent(cwt.getWord(), new ConcurrentSkipListSet<ComparableWordTuple>());
-			ConcurrentSkipListSet<ComparableWordTuple> ns = searchIndex.get(cwt.getWord());
+			MString word = new MString(cwt.getWord());
+			searchIndex.putIfAbsent(word, new ConcurrentSkipListSet<ComparableWordTuple>());
+			ConcurrentSkipListSet<ComparableWordTuple> ns = searchIndex.get(word);
 			// System.out.printf("new NavigableSet => %s\n", ns);
 
 			ns.add(cwt);
@@ -109,8 +110,9 @@ public class HashSearch implements Search {
 		for (String word : words) {
 			word = new Stemmer().stem(word.trim().toLowerCase());
 			// System.out.printf("Stemmed word => %s\n", word);
-
-			NavigableSet<ComparableWordTuple> ns = searchIndex.get(word);
+			// System.out.printf("Stemmed word => %s\n", new MString(word).hashCode());
+			
+			NavigableSet<ComparableWordTuple> ns = searchIndex.get(new MString(word));
 			if (ns == null) {
 				continue;
 			}

@@ -45,11 +45,12 @@ public class ComparableWordTuple implements Comparable<ComparableWordTuple> {
 		this.word = word;
 		this.documentPositions = documentPositions;
 		this.documentName = documentName;
-		this.hashCode = Hashing.murmur3_32().newHasher()
-			.putBytes(documentName.getBytes())
-			.putBytes(word.getBytes())
-			.hash()
-			.asInt();
+		this.hashCode = Math.abs(
+				Hashing.murmur3_32().newHasher()
+				.putBytes(documentName.getBytes())
+				.putBytes(word.getBytes())
+				.hash()
+				.asInt());
 	}
 
 	/**

@@ -219,8 +219,6 @@ public class SearchTest {
 
 		List<SearchResult> results = search.search("nation question");
 
-		System.out.println(results);
-
 		// Ensure we got results
 		assertNotNull(results);
 

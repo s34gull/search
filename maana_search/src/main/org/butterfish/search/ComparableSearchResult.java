@@ -31,9 +31,10 @@ public class ComparableSearchResult extends SearchResult implements Comparable<C
 	 * @param score
 	 */
 	public void addScoredWord(ComparablePositionedWord word, Integer score) {
-		System.out.printf(
-				"ComparableSearchResult.addScoredWord(): documentName => %s | positionedWord => %s | score => %d\n",
-				documentName, word, score);
+		// System.out.printf(
+		// "ComparableSearchResult.addScoredWord(): documentName => %s |
+		// positionedWord => %s | score => %d\n",
+		//		documentName, word, score);
 		this.documentPositions.add(word);
 		this.count.addAndGet(word.getPositions().size());
 		this.score.addAndGet(score);

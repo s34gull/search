@@ -2,6 +2,8 @@ package org.butterfish.search;
 
 import java.util.List;
 
+import org.butterfish.search.ComparableWordTuple;
+
 import com.google.common.hash.Hashing;
 
 /**
